@@ -1,0 +1,9 @@
+<h1>New Link</h1>
+<%= form_for :link, url: '/users' do |f| %>
+  <div>Name: <%= f.text_field :name %></div>
+  <div>Url: <%= f.text_field :url %></div>
+
+  <ul id="tag-options"></ul>
+
+  <%= f.submit 'submit', class: 'new-link-button' %>
+<% end %>
