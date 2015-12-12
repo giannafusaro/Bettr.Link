@@ -1,0 +1,133 @@
+////////////////////////////////////////////////////////////////////////////////
+// breakpoint
+////////////////////////////////////////////////////////////////////////////////
+@mixin breakpoint($point) {
+
+  @if $point == large {
+    @media (min-width: 768px) and (max-width: 1824px) {
+      @content;
+    }
+  }
+  @else if $point == small {
+    @media (min-width: 350px) and (max-width: 767px) {
+      @content;
+    }
+  }
+}
+
+@mixin font-smoothing($value: antialiased) {
+  @if $value == antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+@mixin fancy-button-basics {
+  &:after {
+    content: "";
+    z-index: -100;
+    @include position(absolute, 0 0 0 0);
+    @include transform(scale3d(0.9, 0.9, 1));
+    @include transition(box-shadow 0.3s, transform 0.3s, color 0.3s);
+  }
+  &:hover {
+    &:after {
+      @include transform(scale3d(1, 1, 1deg));
+    }
+  }
+}
+
+@mixin fancy-button($text-color: $black, $shadow-color: darken($purple, 5%)) {
+  @include fancy-button-basics();
+  color: $text-color;
+  border: 1px solid $text-color;
+
+  &:after {
+    color: $text-color;
+    box-shadow: inset 0 0 0 35px $shadow-color;
+  }
+
+  &:hover {
+    color: $shadow-color;
+    &:after {
+      border: $shadow-color;
+      box-shadow: inset 0 0 0 2px $shadow-color;
+    }
+  }
+}
+@mixin fancy-button-alt($text-color: $black, $shadow-color: darken($purple, 5%)) {
+  @include fancy-button-basics();
+  color: $shadow-color;
+  &:after {
+    border: $shadow-color;
+    box-shadow: inset 0 0 0 2px $shadow-color;
+  }
+  &:hover {
+    color: $text-color;
+    &:after {
+      color: $text-color;
+      box-shadow: inset 0 0 0 35px $shadow-color;
+    }
+  }
+}
+
+@mixin input-addons($breakpoint) {
+  .input-append {
+    @if $breakpoint == large {
+      &:first-of-type {
+        input { text-indent: 1.5em; }
+        i {
+          font-size: 1.5em;
+          @include position(absolute, 1em null 0 18px);
+        }
+      }
+      &:last-of-type {
+        input { text-indent: 1.2em; }
+        i {
+          font-size: 1.8em;
+          @include position(absolute, 0.8em null 0 0.4em);
+        }
+      }
+    }
+
+    @else if $breakpoint==small {
+      &:first-of-type {
+        input { text-indent: 2.3em; }
+        i {
+          font-size: 2em;
+          @include position(absolute, -0.3em null 0 18px);
+        }
+      }
+      &:last-of-type {
+        input { text-indent: 2.3em; }
+        i {
+          font-size: 3em;
+          @include position(absolute, -0.3em null 0 0.15em);
+        }
+      }
+    }
+
+  }
+
+
+}
+
+
+
+
+
+$teal2: #089fa5;
+
+$purple5: #9f0b75;
+$blue5: rgb(11, 115, 159);
+$blue2: #1972A4;
+$cogs: #3D899C;
+$purple2: #604CC3;
+$purple3: #6E386E;
+$blue3: #2F64A3;
+$purple4: #793b89;
+$slate: #2d4059;

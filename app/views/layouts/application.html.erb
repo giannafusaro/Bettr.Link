@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BettrLink</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+    <nav>
+      <h1 class="nav-group company-name">Bettr.Link</h1>
+      <span class="nav-group login">
+        <% unless current_user.nil? %>
+          <%= link_to 'links', dashboard_path(current_user.name.parameterize) %>
+          <%= link_to 'settings', settings_path(current_user.name.parameterize) %>
+          <%= link_to 'logout', logout_path %>
+        <% else %>
+          <%= button_form_for :user, url: '/login' do |f| %>
+            <span class='input-append'>
+              <%= f.text_field(:email) %>
+              <i class='fa fa-envelope fa-fw'></i>
+            </span>
+            <span class='input-append'>
+              <%= f.password_field(:password) %>
+              <i class='fa fa-lock fa-fw'></i>
+              <!-- <i class='fa fa-unlock-alt'></i> -->
+            </span>
+            <%= f.button "login", class: 'button' %>
+          <% end %>
+        <% end %>
+      </span>
+    </nav>
+    <div class="share">
+      <span>
+        <%= link_to '', 'http://www.product-hunt.com', class: "fa fa-product-hunt fa-2x " %>
+        <%= link_to '', 'http://www.ycombinator.com', class: "fa fa-hacker-news fa-2x" %>
+        <%= link_to '', 'http://www.reddit.com', class: "fa fa-reddit fa-2x" %>
+        <%= link_to '', 'http://www.twitter.com', class: "fa fa-twitter-square fa-2x" %>
+        <%= link_to '', 'http://www.facebook.com', class: "fa fa-facebook-official fa-2x" %>
+        <%= link_to '', 'http://www.google.com', class: "fa fa-google-plus-square fa-2x" %>
+      </span>
+    </div>
+
+<%= yield %>
+
+</body>
+</html>

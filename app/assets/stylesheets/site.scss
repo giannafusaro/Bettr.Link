@@ -1,0 +1,209 @@
+////////////////////////////////////////////////////////////
+// Globals
+////////////////////////////////////////////////////////////
+$black: #24252A;
+$brown: #2A2B30;
+$purple: #5B59DF;
+$blue: #00CDED;
+$green: #00F2A9;
+$grey: #909090;
+
+a {
+  text-decoration: none;
+  font-size: 2em;
+  color: $grey;
+  font-family: 'Edmondsans Medium';
+  font-variant: small-caps;
+}
+
+
+h2, h3, h4 {
+  font-family: 'blenda script';
+  text-align: center;
+  font-size: 2.5em;
+}
+
+body {
+  background: url('black-felt.png');
+  background-color: $black;
+  color: $grey;
+  @include font-smoothing(antialiased);
+}
+
+#{$all-text-inputs-focus}, #{$all-button-inputs-focus} {
+  outline: none;
+}
+#{$all-text-inputs}, label {
+  font-family: 'rodina light';
+  font-size: 1.5em;
+}
+
+label {
+  @include user-select(none);
+}
+
+//////////////////////////
+// Forms
+////////////////////////
+
+#{$all-text-inputs} {
+  margin: .5em 0em;
+  color: $grey;
+  padding: 0.8em;
+  background: transparent;
+  width: 100%;
+  border: 1px solid #909090;
+}
+#{$all-text-inputs}, #{$all-button-inputs} {
+  font-size: 1.5em;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.button {
+  @include fancy-button();
+}
+.button-alt {
+  @include fancy-button-alt();
+}
+
+#{$all-button-inputs} {
+  position: relative;
+  border-color: transparent;
+  padding: .5em;
+  width: 100%;
+  font-variant: small-caps;
+  background: transparent;
+}
+
+
+////////////////////////////////////////////////////////////
+// Nav Bar
+////////////////////////////////////////////////////////////
+nav {
+  @include display(flex);
+  @include flex-flow(row wrap);
+  @include justify-content(center);
+  @include align-items(center);
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+.company-name {
+  font-size: 5em;
+  font-family: 'dense';
+  margin: 0;
+}
+
+@include breakpoint(large) {
+  nav {
+    @include justify-content(space-around);
+  }
+  .login form {
+    @include display(inline-flex);
+    #{$all-button-inputs} {
+      width: 150px;
+    }
+    #{$all-text-inputs}, #{$all-button-inputs} {
+      padding: .5em;
+      margin: .3em;
+      width: auto;
+    }
+  }
+  @include input-addons(large)
+}
+
+@include breakpoint(small) {
+  @include input-addons(small)
+}
+////////////////////////////////////////
+// Log in form
+///////////////////////////////////////
+.input-append {
+  position: relative;
+}
+
+
+
+////////////////////////////////////////
+// Sign up form
+///////////////////////////////////////
+div.signup {
+  max-width: 600px;
+  padding: 0em 3em;
+  margin: 0 auto 0 auto;
+
+  div.field-container {
+    position: relative;
+    margin-bottom: 2.5em;
+  }
+  #{$all-text-inputs} {
+    border: 0;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  span.field-standin, label {
+    z-index: -1;
+    width: 100%;
+    @include position(absolute, null null 0 0);
+  }
+
+  span.field-standin {
+    height: 100%;
+    border-style: solid;
+    @include border-width(null null 3px null);
+    @include border-color(transparent transparent $grey transparent);
+    &:after {
+      content: '';
+      background: rgba(58, 59, 63, 0.7);
+      border-radius: 4px;
+      @include position(absolute, 0 0 0 0);
+      @include transition(all 0.5s $ease-out-circ);
+      @include transform(perspective(1000px) rotate3d(1, 0, 0, 90deg));
+      @include transform-origin(50% 100%);
+    }
+  }
+
+  label {
+    padding: 0.5em;
+    @include transition(all 0.3s $ease-in-quad);
+  }
+  
+  input:focus ~ label,
+  input.filled ~ label {
+    color: darken($purple, 5%);
+    @include transition(all 0.2s $ease-out-quad);
+    @include transform(translateY(-80px));
+  }
+
+  input:focus ~ span.field-standin,
+  input.filled ~ span.field-standin {
+    @include transition(all 0.5s $ease-in-circ);
+    @include border-width(null null null null);
+    @include border-color(transparent transparent darken($purple, 5%) transparent);
+    @include border-width(2px);
+    &:after {
+      @include transform(perspective(1000px) rotate3d(1, 0, 0, 0deg));
+    }
+  }
+}
+
+.share {
+  text-align: center;
+}
+
+#tag-options {
+  display: none;
+  list-style: none;
+  flex-flow: row wrap;
+  width: 100%;
+  align-items: center;
+  padding: 0;
+}
+
+li.tag-option {
+  // border: 1px solid #444;
+  flex-grow: 1;
+  padding: .3em;
+  display: flex;
+}

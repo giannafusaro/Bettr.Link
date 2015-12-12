@@ -1,0 +1,29 @@
+<h3> Sign Up </h3>
+<div class='signup'>
+  <%= button_form_for :user, url: '/users' do |f| %>
+    <div class="field-container">
+      <%= f.text_field :name, class: 'signup' %>
+      <%= f.label :name %>
+      <span id='fs-name' class='field-standin'></span>
+    </div>
+    <div class="field-container">
+      <%= f.text_field :email, class: 'signup' %>
+      <%= f.label :email %>
+      <span id='fs-email' class='field-standin'></span>
+    </div>
+    <div class="field-container">
+      <%= f.password_field :password, class: 'signup' %>
+      <%= f.label :password %>
+      <span id='fs-password' class='field-standin'></span>
+
+    </div>
+    <div class="field-container">
+      <%= f.password_field :password_confirmation, class: 'signup' %>
+      <%= f.label :confirm_password %>
+      <span id='fs-password-confirmation' class='field-standin'></span>
+
+    </div>
+
+    <%= f.button "sign up", class: 'button-alt' %>
+  <% end %>
+</div>
