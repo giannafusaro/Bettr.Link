@@ -9,15 +9,10 @@ class Link < ActiveRecord::Base
 
     @trie_heap, @content, word = TrieHeap.new, {}, ''
 
-    @page = Scraper.new.get_text(url)
-    # @content[:title] = raw.title
-    # @content[:selected_elements] = self.html_info(raw)
-    # data.search("script").each{ |e| e.unlink }
-
-    # str = Nokogiri.parse(raw, nil, raw.encoding)
-    # puts str.inspect
-    # puts data.at('body')
-    @page.chars.each do |char|
+    scraper = Scraper.new
+    scraper.get(url)
+    puts scraper.globals
+    scraper.text.chars.each do |char|
       if char[/[ \r\n\t!"#$%&'()*+,-.:;<=>?@\]\[^_`{|}~\/\\\d]/].nil?
         word << char.downcase
       elsif (!STOP_WORDS.includes?(word) && word.length > 1)
