@@ -13,11 +13,11 @@ $(document).ready ->
           $('#status').text('')
           console.log(data)
           large = 4
-          for item in data.frequent_words
+          for item, index in data.frequent_words
            for key, value of item
             $('ul#tag-options')
             .append """
-              <li class='tag-option' style='font-size:#{value}em' >
+              <li class='tag-option' style='font-size:#{3}em' >
                 #{JSON.stringify(key)[1..-2]}
               </li>
             """

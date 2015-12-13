@@ -54,18 +54,6 @@ label {
   width: 100%;
   border: 1px solid #909090;
 }
-#{$all-text-inputs}, #{$all-button-inputs} {
-  font-size: 1.5em;
-  box-sizing: border-box;
-  border-radius: 4px;
-}
-
-.button {
-  @include fancy-button();
-}
-.button-alt {
-  @include fancy-button-alt();
-}
 
 #{$all-button-inputs} {
   position: relative;
@@ -74,8 +62,18 @@ label {
   width: 100%;
   font-variant: small-caps;
   background: transparent;
+  cursor: pointer;
 }
 
+#{$all-text-inputs}, #{$all-button-inputs} {
+  font-size: 1.5em;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.button { @include fancy-button(); }
+
+.button-alt { @include fancy-button-alt(); }
 
 ////////////////////////////////////////////////////////////
 // Nav Bar
@@ -95,6 +93,7 @@ nav {
   margin: 0;
 }
 
+// Breakpoints for responsive nav
 @include breakpoint(large) {
   nav {
     @include justify-content(space-around);
@@ -110,11 +109,11 @@ nav {
       width: auto;
     }
   }
-  @include input-addons(large)
+  @include input-addons(large);
 }
 
 @include breakpoint(small) {
-  @include input-addons(small)
+  @include input-addons(small);
 }
 ////////////////////////////////////////
 // Log in form
@@ -168,7 +167,7 @@ div.signup {
     padding: 0.5em;
     @include transition(all 0.3s $ease-in-quad);
   }
-  
+
   input:focus ~ label,
   input.filled ~ label {
     color: darken($purple, 5%);

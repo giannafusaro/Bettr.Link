@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   end
 
   def login
-    @user = User.find_by_email(params[:email])
+    @user = User.find_by_email(params[:user][:email])
     if @user
       session[:user_id] = @user.id
       flash[:notice] = "User logged in successfully"
