@@ -17,6 +17,7 @@ gem 'turbolinks'                # Turbolinks makes links in your application fas
 gem 'capybara'                  # Simulate user interactions
 gem 'poltergeist'               # PhantomJS driver for Capybara
 gem 'dsl'                       # Create custom Domain-Specific-Languages
+gem 'metainspector'             # Intellegently scrape and parse page content
 
 # API
 gem 'rails-api'                 # Will be merged in Rails 5
