@@ -5,7 +5,7 @@ class Analyzer
   include Capybara::DSL
   include ActiveSupport::Configurable
 
-  attr_reader :url, :technologies, :content, :to_hash
+  attr_reader :url, :technologies, :content, :to_hash, :keywords, :whois
   alias :html :content
 
   def initialize(url)
@@ -29,11 +29,12 @@ class Analyzer
 
     @metadata = run_metainspector
     @technologies = run_wappalyzer
-    #keywords = run_keywords
-    #whois = run_whois
+    @keywords = run_keywords
+
+    @whois = Whois.whois(@url.host).properties
 
     @session.driver.quit
-    @to_hash = @metadata.merge({ technologies: @technologies, keywords: [] })
+    @to_hash = @metadata.merge({ technologies: @technologies, keywords: @keywords, whois: @whois })
   end
 
   private
@@ -62,5 +63,21 @@ class Analyzer
 
       # Perform analysis and end session
       JSON.parse @session.evaluate_script "w.driver.init();"
+    end
+
+    def run_keywords
+      @trie_heap = TrieHeap.new(config.many_keywords)
+      # use trie heap to find keywords for visible text
+      @session.document.text('body').chars.inject("") do |memo, char|
+        if char[/[ \r\n\t!"#$%&'()*+,-.:;<=>?@\]\[^_`{|}~\/\\\d]/].nil?
+          memo << char.downcase
+        elsif !STOP_WORDS.includes?(memo) && memo.length > 1
+          @trie_heap.add(memo)
+          ""
+        else
+          ""
+        end
+      end
+      @trie_heap.sort
     end
 end

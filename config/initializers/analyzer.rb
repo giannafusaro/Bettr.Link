@@ -1,6 +1,8 @@
 Analyzer.configure do |config|
-  
+
   WAPPALYZER_PATH = "#{Rails.root}/vendor/wappalyzer"
+
+  config.many_keywords = 15
 
   config.driver = :poltergeist_with_wappalyzer
   config.apps = "#{WAPPALYZER_PATH}/apps.json"

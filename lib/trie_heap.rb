@@ -28,7 +28,7 @@ class TrieNode
   end
 
   def to_s
-    "#{@data[:word]} occurs #{@data[:frequency]}"
+    "#{@data[:word]}: #{@data[:frequency]}"
   end
 
 end
@@ -47,7 +47,7 @@ class TrieTree
 
   def add word
     # iterate through word characters and update trie where needed
-    word.chars.each.inject(@root) do |current, letter|
+    word.chars.inject(@root) do |current, letter|
       current.add(letter)
       current.next_letters[letter]
     end.record(word)
@@ -65,14 +65,13 @@ class TrieTree
 
   def includes? word
     current = @root
-    word.chars.each do |letter|
+    word.chars do |letter|
       if(current.next_letters_include?(letter))
         current = current.next_letters[letter]
       else
         return false
       end
     end
-
     current.data[:word] == word
   end
 
@@ -114,6 +113,10 @@ class HeapNode
     @word = trie_node.data[:word]
   end
 
+  def data
+    { @word => @frequency }
+  end
+
 end
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -123,10 +126,10 @@ end
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 class Heap
   include ActiveModel::Model
-  CAPACITY = 15
   attr_accessor :nodes
 
-  def initialize
+  def initialize(many_keywords)
+    @capacity = many_keywords
     @nodes = []
   end
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -140,7 +143,7 @@ class Heap
     when trie_node.heap_index != -1
       @nodes[trie_node.heap_index].frequency += 1
       heapify_down_from(trie_node.heap_index)
-    when @nodes.length == CAPACITY
+    when @nodes.length == @capacity
       replace_root_with(trie_node) if trie_node.data[:frequency] > @nodes[0].frequency
     else
       @nodes.push(HeapNode.new(trie_node, @nodes.length))
@@ -186,7 +189,7 @@ class Heap
     sorted, nodes = [], @nodes.clone
     nodes.length.downto(1) do |i|
       swap(0, (i-1))
-      sorted.unshift @nodes.pop
+      sorted.unshift @nodes.pop.data
       heapify_down_from 0
     end
     @nodes = nodes
@@ -194,7 +197,7 @@ class Heap
   end
 
   def to_s
-    @nodes.each { |x| ap "#{x.word.upcase} : #{x.frequency}" }
+    @nodes.each { |node| ap node.data }
   end
 end
 
@@ -207,17 +210,16 @@ class TrieHeap
   include ActiveModel::Model
   attr_accessor :trie_tree, :heap
 
-  def initialize
+  def initialize(many_keywords=15)
     @trie_tree = TrieTree.new
-    @heap = Heap.new
+    @heap = Heap.new(many_keywords)
   end
 
   def add word
     @heap.add(@trie_tree.add(word))
   end
 
-  def max_frequency_words
+  def sort
     @heap.sort
   end
-
 end
