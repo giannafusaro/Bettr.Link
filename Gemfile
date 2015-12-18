@@ -16,7 +16,6 @@ gem 'turbolinks'                # Turbolinks makes links in your application fas
 # Web Scraping
 gem 'capybara'                  # Simulate user interactions
 gem 'poltergeist'               # PhantomJS driver for Capybara
-gem 'phantomjs'                 # Scripted, headless browser w/ JS API
 gem 'dsl'                       # Create custom Domain-Specific-Languages
 
 # API
@@ -42,7 +41,6 @@ end
 
 group :development do
   gem 'web-console', '~> 2.0'   # Access IRB on exceptions or <%= console %> in views
-  gem 'spring'                  # Run app in background
   gem 'quiet_assets'            # Hush them asset calls
   gem 'better_errors'           # Better error pages for debugging
   gem 'guard'                   # Handle filesystem events
