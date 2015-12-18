@@ -26,17 +26,15 @@ gem 'jbuilder', '~> 2.0'        # Build JSON APIs with ease
 # Authentication
 gem 'bcrypt', '~> 3.1.7'        # Use ActiveModel has_secure_password
 
+# Deployment
+gem 'capistrano-rails'          # Use Capistrano for deployment
+
 # Convenience
 gem 'awesome_print'             # Better console output
 
 #########################################
 # Environments
 #########################################
-
-group :production do
-  gem 'unicorn'                 # Use Unicorn as the app server
-  gem 'capistrano-rails'        # Use Capistrano for deployment
-end
 
 group :development, :test do
   gem 'byebug'                  # Halt execution and debug code anywhere
@@ -47,4 +45,7 @@ group :development do
   gem 'spring'                  # Run app in background
   gem 'quiet_assets'            # Hush them asset calls
   gem 'better_errors'           # Better error pages for debugging
+  gem 'guard'                   # Handle filesystem events
+  gem 'guard-bundler'           # Bundle gems on Gemfile changes
+  gem 'guard-pow'               # Restart pow server when needed
 end
