@@ -18,10 +18,12 @@ gem 'capybara'                  # Simulate user interactions
 gem 'poltergeist'               # PhantomJS driver for Capybara
 gem 'dsl'                       # Create custom Domain-Specific-Languages
 gem 'metainspector'             # Intellegently scrape and parse page content
+gem 'whois'                     # Gather Whois information for each domain
 
 # API
 gem 'rails-api'                 # Will be merged in Rails 5
 gem 'jbuilder', '~> 2.0'        # Build JSON APIs with ease
+gem 'acts-as-taggable-on'       # Nice way to keep track of tags
 
 # Authentication
 gem 'bcrypt', '~> 3.1.7'        # Use ActiveModel has_secure_password
