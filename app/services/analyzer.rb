@@ -71,7 +71,7 @@ class Analyzer
       @session.document.text('body').chars.inject("") do |memo, char|
         if char[/[ \r\n\t!"#$%&'()*+,-.:;<=>?@\]\[^_`{|}~\/\\\d]/].nil?
           memo << char.downcase
-        elsif !STOP_WORDS.includes?(memo) && memo.length > 1
+        elsif !STOP_WORDS.include?(memo) && memo.length > 1
           @trie_heap.add(memo)
           ""
         else

@@ -8,7 +8,7 @@ BettrLink::Application.routes.draw do
   # http://railscasts.com/episodes/350-rest-api-versioning
 
   constraints subdomain: 'api' do
-    scope module: 'api' do
+    scope module: 'api', defaults: { format: :json } do
       namespace :v1, as: :api, constraints: Constraints::Api.new(version: 1, default: true) do
         get '/analyze', to: 'links#analyze', as: :analyze
       end
