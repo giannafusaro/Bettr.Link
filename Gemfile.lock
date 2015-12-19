@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/stympy/faker.git
+  revision: f4d5a9f4c9c98b6be1441801d285c4486f199f52
+  tag: v1.6.1
+  specs:
+    faker (1.6.1)
+      i18n (~> 0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -263,6 +271,7 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 4.1.0)
   dsl
+  faker!
   guard
   guard-bundler
   guard-pow

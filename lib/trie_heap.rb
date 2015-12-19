@@ -3,14 +3,12 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 class TrieNode
   include ActiveModel::Model
-  attr_accessor :data, :next_letters, :seen, :heap_index
+  attr_accessor :keyword, :occurs, :next_letters, :heap_index
 
   def initialize
-    @data, @next_letters, @seen, @heap_index = { frequency: 0 }, {}, false, -1
-  end
-
-  def visit
-    @seen = !@seen
+    @next_letters = {}
+    @heap_index = -1
+    @occurs = 0
   end
 
   def add letter
@@ -22,15 +20,10 @@ class TrieNode
   end
 
   def record word
-    @data[:frequency] += 1
-    @data[:word] = word
+    @occurs += 1
+    @keyword = word
     self
   end
-
-  def to_s
-    "#{@data[:word]}: #{@data[:frequency]}"
-  end
-
 end
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -63,36 +56,29 @@ class TrieTree
     end
   end
 
-  def includes? word
-    current = @root
-    word.chars do |letter|
-      if(current.next_letters_include?(letter))
-        current = current.next_letters[letter]
-      else
-        return false
-      end
-    end
-    current.data[:word] == word
+  def include? word
+    word.chars.inject(@root) do |memo, char|
+      break memo if memo.next_letters[char].nil?
+      memo.next_letters[char]
+    end.keyword == word
   end
 
-  # def wildcard_search_for(node=@root, expression)
-  #   to_s() if expression == '*'
-  #   node.visit
-  #   expression.chars.each do |letter|
-  #     while(current.next_letters_include?(letter))
-  # end
-  #
-  # def traverse_from(node=@root)
-  # end
+  def autocomplete(term, node=@root)
+    if term[0] == '*' || term[0].nil?
+      get_words(node)
+    else
+      autocomplete(term[1..-1], node.next_letters[term[0]]) if node.next_letters[term[0]]
+    end
+  end
+
+  def get_words(node=@root, words=[])
+    words << {node.keyword => node.occurs} unless node.keyword.nil?
+    node.next_letters.each { |neighbor, value| get_words(value, words) }
+    words
+  end
 
   def to_s(node=@root)
-    node.visit
-    puts node if (node.data[:frequency] > 0)
-    unless (node.next_letters.empty?)
-      node.next_letters.each do |neighbor, value|
-        to_s(value) unless value.seen == node.seen
-      end
-    end
+    get_words(node)
   end
 end
 
@@ -104,17 +90,17 @@ end
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 class HeapNode
   include ActiveModel::Model
-  attr_accessor :trie_node, :frequency, :word
+  attr_accessor :trie_node, :occurs, :keyword
 
   def initialize trie_node, heap_index
     @trie_node = trie_node
     @trie_node.heap_index = heap_index
-    @frequency = trie_node.data[:frequency]
-    @word = trie_node.data[:word]
+    @occurs = trie_node.occurs
+    @keyword = trie_node.keyword
   end
 
   def data
-    { @word => @frequency }
+    { @keyword => @occurs }
   end
 
 end
@@ -141,10 +127,10 @@ class Heap
   def add trie_node
     case
     when trie_node.heap_index != -1
-      @nodes[trie_node.heap_index].frequency += 1
+      @nodes[trie_node.heap_index].occurs += 1
       heapify_down_from(trie_node.heap_index)
     when @nodes.length == @capacity
-      replace_root_with(trie_node) if trie_node.data[:frequency] > @nodes[0].frequency
+      replace_root_with(trie_node) if trie_node.occurs > @nodes[0].occurs
     else
       @nodes.push(HeapNode.new(trie_node, @nodes.length))
       heapify_up_from((@nodes.length-1))
@@ -165,11 +151,11 @@ class Heap
   # make sure parents have lower frequency than children
   def heapify_down_from index
     current, lchild, rchild = @nodes[index], @nodes[2*index+1], @nodes[2*index+2]
-    if(lchild && (current.frequency > lchild.frequency))
+    if(lchild && (current.occurs > lchild.occurs))
       swap index, (2*index+1)
       heapify_down_from(2*index+1)
     end
-    if(rchild && (current.frequency > rchild.frequency))
+    if(rchild && (current.occurs > rchild.occurs))
       swap index, (2*index+2)
       heapify_down_from(2*index+2)
     end
@@ -179,7 +165,7 @@ class Heap
   def heapify_up_from index
     parent_index = index.odd? ? index/2 : index/2-1
     current, parent = @nodes[index], @nodes[parent_index]
-    if(current.frequency < parent.frequency)
+    if(current.occurs < parent.occurs)
       swap index, parent_index
       heapify_up_from(index/2+1)
     end
@@ -215,6 +201,10 @@ class TrieHeap
     @heap = Heap.new(many_keywords)
   end
 
+  def add_many(words)
+    words.each { |word| add word }
+  end
+
   def add word
     @heap.add(@trie_tree.add(word))
   end
@@ -223,3 +213,15 @@ class TrieHeap
     @heap.sort
   end
 end
+# tt = TrieTree.new
+# tt.add('star')
+# tt.add('stain')
+# tt.add('stairs')
+# tt.add('stark')
+# tt.add('stub')
+# tt.add('sterling')
+# tt.add('gumshoe')
+# tt.add('gum')
+# tt.add('gummy')
+# tt.longest_prefix_of('gummy')
+# tt.longest_prefix_of('gumm')

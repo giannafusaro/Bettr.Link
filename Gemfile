@@ -28,6 +28,9 @@ gem 'acts-as-taggable-on'       # Nice way to keep track of tags
 # Authentication
 gem 'bcrypt', '~> 3.1.7'        # Use ActiveModel has_secure_password
 
+# Testing                       # Use faker for mock data
+gem 'faker', git: 'https://github.com/stympy/faker.git', tag: 'v1.6.1'
+
 # Deployment
 gem 'capistrano-rails'          # Use Capistrano for deployment
 
