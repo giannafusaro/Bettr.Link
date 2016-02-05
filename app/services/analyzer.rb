@@ -23,18 +23,33 @@ class Analyzer
   end
 
   def process!
+    # Start PhantomJS Session
     @session.visit @url.url
+
+    # Scrape headers and content
     @headers = @session.response_headers
     @content = @session.html.encode('UTF-8', invalid: :replace, undef: :replace)
 
+    # Run analyses
     @metadata = run_metainspector
-    @technologies = run_wappalyzer
     @keywords = run_keywords
+    @technologies = run_wappalyzer
 
-    @whois = Whois.whois(@url.host).properties
-
+    # End PhantomJS session
     @session.driver.quit
-    @to_hash = @metadata.merge({ technologies: @technologies, keywords: @keywords, whois: @whois })
+
+    # Third-party analyses
+    @whois = run_whois
+    @logo = run_logo
+
+    # Populate results
+    @to_hash = @metadata.merge({
+      url: @url.url,
+      logo: run_logo,
+      technologies: @technologies,
+      keywords: @keywords,
+      whois: @whois
+    })
   end
 
   private
@@ -79,5 +94,15 @@ class Analyzer
         end
       end
       @trie_heap.sort
+    end
+
+    def whois
+      Whois.whois(@url.host).properties
+    end
+
+    def run_logo
+      logo_url = "http://logo.clearbit.com/#{@url.host}?size=300"
+      response = Net::HTTP.get URI(logo_url)
+      logo_url unless response == ""
     end
 end
