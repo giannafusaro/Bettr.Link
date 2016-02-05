@@ -45,7 +45,7 @@ class Analyzer
     # Populate results
     @to_hash = @metadata.merge({
       url: @url.url,
-      logo: run_logo,
+      logo: @logo,
       technologies: @technologies,
       keywords: @keywords,
       whois: @whois
